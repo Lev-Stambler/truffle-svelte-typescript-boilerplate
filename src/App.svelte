@@ -1,10 +1,10 @@
-<script>
-  import Information from "./Information.svelte";
-  import SimpleStorageContract from "../../build/contracts/SimpleStorage.json";
-  import loadWeb3 from "../utils/web3";
+<script lang="ts">
+  // import Information from "./components/Information.svelte";
+  import SimpleStorageContract from "../build/contracts/SimpleStorage.json";
+  import loadWeb3 from "./utils/web3";
   import { onMount } from "svelte";
 
-  let storageValue;
+  let storageValue : any;
   let connected = false;
   let web3;
 
@@ -17,7 +17,7 @@
   async function loadBlockchainData() {
     const accounts = (await window.ethereum.send('eth_requestAccounts')).result;
     const networkId = await window.web3.eth.net.getId();
-    const simpleStorageData = SimpleStorageContract.networks[networkId];
+    const simpleStorageData = (SimpleStorageContract).networks[networkId];
     if (simpleStorageData) {
       const simpleStorage = new web3.eth.Contract(
         SimpleStorageContract.abi,
@@ -46,7 +46,7 @@
       <h1 class="masthead text-center text-dark">Truffle Box</h1>
       <h4 class="text-center text-primary">Skeleton SvelteJS truffle box</h4>
 
-      <Information {connected} />
+      <!-- <Information {connected} /> -->
 
       <div class="alert alert-secondary">
         <h4>Smart Contract Example</h4>

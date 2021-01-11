@@ -1,27 +1,23 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf8" />
-    <meta name="viewport" content="width=device-width" />
+<html lang="en">
+<head>
+	<meta charset='utf-8'>
+	<meta name='viewport' content='width=device-width,initial-scale=1'>
 
-    <title>svelte-box truffle base</title>
-    <meta name="description" content="svelte-box truffle base" />
-    <script src="web3.min.js"></script>
-    <script>
-      window.Web3 = Web3
-    </script>
-    <meta name="author" content="Antony Jones" />
+	<title>Svelte app</title>
+	<!-- TODO add web3 -->
 
-    <!--[if lt IE 9]>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
-    <![endif]-->
+	<script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+	<script>
+		window.Web3 = Web3;
+	</script>
+	<link rel='icon' type='image/png' href='/favicon.png'>
+	<link rel='stylesheet' href='/global.css'>
+	<link rel='stylesheet' href='/build/bundle.css'>
 
-    <link rel="icon" type="image/png" href="/favicon.png" />
-    <!-- <link rel='stylesheet' href='/global.css'> -->
-    <link rel="stylesheet" href="/bundle.css" />
+	<script defer src='/build/bundle.js'></script>
+</head>
 
-    <script defer src="/bundle.js"></script>
-  </head>
-
-  <body></body>
+<body>
+</body>
 </html>
