@@ -1,3 +1,5 @@
+## TODO: document how to get setup. (truffle compile, then just npm i, npm run dev)
+
 *Looking for a shareable component template? Go here --> [sveltejs/component-template](https://github.com/sveltejs/component-template)*
 
 ---
