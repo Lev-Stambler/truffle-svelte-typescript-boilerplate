@@ -1,3 +1,8 @@
+const HDWalletProvider = require('truffle-hdwallet-provider-privkey');
+
+let privateKey = process.env.PRIVATE_KEY
+let endpointUrl = "YOUR_END_POINT_HERE"
+
 module.exports = {
   networks: {
     development: {
@@ -5,6 +10,15 @@ module.exports = {
       port: 7545,
       network_id: "*", // Match any network id
     },
+    kovan: {
+      provider: function() {
+        return new HDWalletProvider(
+          //private keys array
+          [privateKey],
+          //url to ethereum node
+          endpointUrl
+        )
+      },
   },
   compilers: {
     solc: {
