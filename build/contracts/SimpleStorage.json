@@ -25,7 +25,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -51,19 +52,20 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.7.0+commit.9e61f92b\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"_message\",\"type\":\"string\"}],\"name\":\"StorageSet\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"get\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"retVal\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"x\",\"type\":\"uint256\"}],\"name\":\"setStore\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"storedData\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/home/lev/code/blockchain/truffle-svelte-typescript-boilerplate/truffle-svelte-starter/contracts/SimpleStorage.sol\":\"SimpleStorage\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/lev/code/blockchain/truffle-svelte-typescript-boilerplate/truffle-svelte-starter/contracts/SimpleStorage.sol\":{\"keccak256\":\"0x68129a79d3ae5be4eb5ab3fe89b2489eee5d308a13502f9c81a3e4d772418c66\",\"urls\":[\"bzz-raw://c4f0ac4185b642aa429442fe24bfee1c325d7d9690502c909b6232971d8b6c09\",\"dweb:/ipfs/QmYvCSWmmCfX5CSHqtwSYjboE4gLCJrhstjMcqSpeUcXua\"]}},\"version\":1}",
-  "bytecode": "0x608060405234801561001057600080fd5b50610167806100206000396000f3fe608060405234801561001057600080fd5b50600436106100415760003560e01c80632a1afcd9146100465780636d4ce63c146100645780637f626f1a14610082575b600080fd5b61004e6100b0565b6040518082815260200191505060405180910390f35b61006c6100b6565b6040518082815260200191505060405180910390f35b6100ae6004803603602081101561009857600080fd5b81019080803590602001909291905050506100bf565b005b60005481565b60008054905090565b806000819055507f60cdc157ca4737a5d39a0e107532616e7bf6946e615228812c7f9bc9f81797a66040518080602001828103825260198152602001807f446174612073746f726564207375636365737366756c6c79210000000000000081525060200191505060405180910390a15056fea264697066735822122007bfe5316e5718a21f7f096b1fffb225c82c62207c591fcc929e952a82b1cf4c64736f6c63430007000033",
-  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100415760003560e01c80632a1afcd9146100465780636d4ce63c146100645780637f626f1a14610082575b600080fd5b61004e6100b0565b6040518082815260200191505060405180910390f35b61006c6100b6565b6040518082815260200191505060405180910390f35b6100ae6004803603602081101561009857600080fd5b81019080803590602001909291905050506100bf565b005b60005481565b60008054905090565b806000819055507f60cdc157ca4737a5d39a0e107532616e7bf6946e615228812c7f9bc9f81797a66040518080602001828103825260198152602001807f446174612073746f726564207375636365737366756c6c79210000000000000081525060200191505060405180910390a15056fea264697066735822122007bfe5316e5718a21f7f096b1fffb225c82c62207c591fcc929e952a82b1cf4c64736f6c63430007000033",
+  "metadata": "{\"compiler\":{\"version\":\"0.7.0+commit.9e61f92b\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"_message\",\"type\":\"string\"}],\"name\":\"StorageSet\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"get\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"retVal\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"x\",\"type\":\"uint256\"}],\"name\":\"setStore\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"storedData\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/home/lev/code/blockchain/eth/truffle-svelte-typescript-boilerplate/contracts/SimpleStorage.sol\":\"SimpleStorage\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/lev/code/blockchain/eth/truffle-svelte-typescript-boilerplate/contracts/SimpleStorage.sol\":{\"keccak256\":\"0x68129a79d3ae5be4eb5ab3fe89b2489eee5d308a13502f9c81a3e4d772418c66\",\"urls\":[\"bzz-raw://c4f0ac4185b642aa429442fe24bfee1c325d7d9690502c909b6232971d8b6c09\",\"dweb:/ipfs/QmYvCSWmmCfX5CSHqtwSYjboE4gLCJrhstjMcqSpeUcXua\"]}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b50610167806100206000396000f3fe608060405234801561001057600080fd5b50600436106100415760003560e01c80632a1afcd9146100465780636d4ce63c146100645780637f626f1a14610082575b600080fd5b61004e6100b0565b6040518082815260200191505060405180910390f35b61006c6100b6565b6040518082815260200191505060405180910390f35b6100ae6004803603602081101561009857600080fd5b81019080803590602001909291905050506100bf565b005b60005481565b60008054905090565b806000819055507f60cdc157ca4737a5d39a0e107532616e7bf6946e615228812c7f9bc9f81797a66040518080602001828103825260198152602001807f446174612073746f726564207375636365737366756c6c79210000000000000081525060200191505060405180910390a15056fea2646970667358221220c0d5cb84f0d87142f25ebb6888cf542b2fd35b3543ab2f7c5855d2e6f1883f4c64736f6c63430007000033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100415760003560e01c80632a1afcd9146100465780636d4ce63c146100645780637f626f1a14610082575b600080fd5b61004e6100b0565b6040518082815260200191505060405180910390f35b61006c6100b6565b6040518082815260200191505060405180910390f35b6100ae6004803603602081101561009857600080fd5b81019080803590602001909291905050506100bf565b005b60005481565b60008054905090565b806000819055507f60cdc157ca4737a5d39a0e107532616e7bf6946e615228812c7f9bc9f81797a66040518080602001828103825260198152602001807f446174612073746f726564207375636365737366756c6c79210000000000000081525060200191505060405180910390a15056fea2646970667358221220c0d5cb84f0d87142f25ebb6888cf542b2fd35b3543ab2f7c5855d2e6f1883f4c64736f6c63430007000033",
   "immutableReferences": {},
   "sourceMap": "25:308:1:-:0;;;;;;;;;;;;;;;;;;;",
   "deployedSourceMap": "25:308:1:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;94:22;;;:::i;:::-;;;;;;;;;;;;;;;;;;;248:83;;;:::i;:::-;;;;;;;;;;;;;;;;;;;123:119;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;94:22;;;;:::o;248:83::-;284:11;314:10;;307:17;;248:83;:::o;123:119::-;179:1;166:10;:14;;;;196:39;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;123:119;:::o",
   "source": "pragma solidity ^0.7.0;\n\ncontract SimpleStorage {\n    event StorageSet(string _message);\n\n    uint public storedData;\n\n    function setStore(uint x) public {\n        storedData = x;\n\n        emit StorageSet(\"Data stored successfully!\");\n    }\n\n    function get() view public returns (uint retVal) {\n        return storedData;\n    }\n}",
-  "sourcePath": "/home/lev/code/blockchain/truffle-svelte-typescript-boilerplate/truffle-svelte-starter/contracts/SimpleStorage.sol",
+  "sourcePath": "/home/lev/code/blockchain/eth/truffle-svelte-typescript-boilerplate/contracts/SimpleStorage.sol",
   "ast": {
-    "absolutePath": "/home/lev/code/blockchain/truffle-svelte-typescript-boilerplate/truffle-svelte-starter/contracts/SimpleStorage.sol",
+    "absolutePath": "/home/lev/code/blockchain/eth/truffle-svelte-typescript-boilerplate/contracts/SimpleStorage.sol",
     "exportedSymbols": {
       "SimpleStorage": [
         87
@@ -433,7 +435,7 @@
   },
   "legacyAST": {
     "attributes": {
-      "absolutePath": "/home/lev/code/blockchain/truffle-svelte-typescript-boilerplate/truffle-svelte-starter/contracts/SimpleStorage.sol",
+      "absolutePath": "/home/lev/code/blockchain/eth/truffle-svelte-typescript-boilerplate/contracts/SimpleStorage.sol",
       "exportedSymbols": {
         "SimpleStorage": [
           87
@@ -856,9 +858,31 @@
     "name": "solc",
     "version": "0.7.0+commit.9e61f92b.Emscripten.clang"
   },
-  "networks": {},
+  "networks": {
+    "5777": {
+      "events": {
+        "0x60cdc157ca4737a5d39a0e107532616e7bf6946e615228812c7f9bc9f81797a6": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "string",
+              "name": "_message",
+              "type": "string"
+            }
+          ],
+          "name": "StorageSet",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0x3695d0B3Bc37efcC347916E548E05C0b55532056",
+      "transactionHash": "0x13f3c720db69e0808dd232f8b5128d36d2d045c92f8e939a870d6c124bc92fc8"
+    }
+  },
   "schemaVersion": "3.3.3",
-  "updatedAt": "2021-01-10T22:58:06.896Z",
+  "updatedAt": "2021-01-29T14:45:33.426Z",
+  "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
     "methods": {},

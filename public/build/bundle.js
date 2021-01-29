@@ -144,12 +144,6 @@ var app = (function () {
             block.i(local);
         }
     }
-
-    const globals = (typeof window !== 'undefined'
-        ? window
-        : typeof globalThis !== 'undefined'
-            ? globalThis
-            : global);
     function mount_component(component, target, anchor) {
         const { fragment, on_mount, on_destroy, after_update } = component.$$;
         fragment && fragment.m(target, anchor);
@@ -328,6 +322,45 @@ var app = (function () {
         $inject_state() { }
     }
 
+    async function loadWeb3 () {
+        // window.Web3 = Web3
+        if (window.ethereum) {
+            window.web3 = new window.Web3(window.ethereum);
+            // await window.ethereum.enable()
+        }
+        else if (window.web3) {
+            window.web3 = new window.Web3(window.web3.currentProvider);
+        }
+        else {
+            window.alert("Non-Ethereum browser detected. You should consider trying MetaMask!");
+        }
+        return window.web3;
+    }
+
+    async function initAPI(web3, Contract) {
+        return await loadBlockchainData(web3, Contract);
+    }
+    async function loadBlockchainData(web3, Contract) {
+        const accounts = (await window.ethereum.send("eth_requestAccounts")).result;
+        if (accounts.length > 1) {
+            parseInt(prompt(`Looks like you have ${accounts.length} number accounts connected. From 1 to ${accounts.length}, which account would you like to connect?`, "1")) - 1;
+        }
+        const address = accounts[0];
+        const networkId = await window.web3.eth.net.getId();
+        const contractData = Contract.networks[networkId];
+        if (contractData) {
+            const contract = new web3.eth.Contract(Contract.abi, contractData.address);
+            return {
+                Contract: contract,
+                address,
+            };
+        }
+        else {
+            alert("Please use a web3.js enabled browser and make sure that the contract is loaded");
+            throw "Please use a web3.js enabled browser and make sure that the contract is loaded";
+        }
+    }
+
     var contractName = "SimpleStorage";
     var abi = [
     	{
@@ -355,7 +388,8 @@ var app = (function () {
     			}
     		],
     		stateMutability: "view",
-    		type: "function"
+    		type: "function",
+    		constant: true
     	},
     	{
     		inputs: [
@@ -383,20 +417,21 @@ var app = (function () {
     			}
     		],
     		stateMutability: "view",
-    		type: "function"
+    		type: "function",
+    		constant: true
     	}
     ];
-    var metadata = "{\"compiler\":{\"version\":\"0.7.0+commit.9e61f92b\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"_message\",\"type\":\"string\"}],\"name\":\"StorageSet\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"get\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"retVal\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"x\",\"type\":\"uint256\"}],\"name\":\"setStore\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"storedData\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/home/lev/code/blockchain/truffle-svelte-typescript-boilerplate/truffle-svelte-starter/contracts/SimpleStorage.sol\":\"SimpleStorage\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/lev/code/blockchain/truffle-svelte-typescript-boilerplate/truffle-svelte-starter/contracts/SimpleStorage.sol\":{\"keccak256\":\"0x68129a79d3ae5be4eb5ab3fe89b2489eee5d308a13502f9c81a3e4d772418c66\",\"urls\":[\"bzz-raw://c4f0ac4185b642aa429442fe24bfee1c325d7d9690502c909b6232971d8b6c09\",\"dweb:/ipfs/QmYvCSWmmCfX5CSHqtwSYjboE4gLCJrhstjMcqSpeUcXua\"]}},\"version\":1}";
-    var bytecode = "0x608060405234801561001057600080fd5b50610167806100206000396000f3fe608060405234801561001057600080fd5b50600436106100415760003560e01c80632a1afcd9146100465780636d4ce63c146100645780637f626f1a14610082575b600080fd5b61004e6100b0565b6040518082815260200191505060405180910390f35b61006c6100b6565b6040518082815260200191505060405180910390f35b6100ae6004803603602081101561009857600080fd5b81019080803590602001909291905050506100bf565b005b60005481565b60008054905090565b806000819055507f60cdc157ca4737a5d39a0e107532616e7bf6946e615228812c7f9bc9f81797a66040518080602001828103825260198152602001807f446174612073746f726564207375636365737366756c6c79210000000000000081525060200191505060405180910390a15056fea264697066735822122007bfe5316e5718a21f7f096b1fffb225c82c62207c591fcc929e952a82b1cf4c64736f6c63430007000033";
-    var deployedBytecode = "0x608060405234801561001057600080fd5b50600436106100415760003560e01c80632a1afcd9146100465780636d4ce63c146100645780637f626f1a14610082575b600080fd5b61004e6100b0565b6040518082815260200191505060405180910390f35b61006c6100b6565b6040518082815260200191505060405180910390f35b6100ae6004803603602081101561009857600080fd5b81019080803590602001909291905050506100bf565b005b60005481565b60008054905090565b806000819055507f60cdc157ca4737a5d39a0e107532616e7bf6946e615228812c7f9bc9f81797a66040518080602001828103825260198152602001807f446174612073746f726564207375636365737366756c6c79210000000000000081525060200191505060405180910390a15056fea264697066735822122007bfe5316e5718a21f7f096b1fffb225c82c62207c591fcc929e952a82b1cf4c64736f6c63430007000033";
+    var metadata = "{\"compiler\":{\"version\":\"0.7.0+commit.9e61f92b\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"_message\",\"type\":\"string\"}],\"name\":\"StorageSet\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"get\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"retVal\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"x\",\"type\":\"uint256\"}],\"name\":\"setStore\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"storedData\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/home/lev/code/blockchain/eth/truffle-svelte-typescript-boilerplate/contracts/SimpleStorage.sol\":\"SimpleStorage\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/lev/code/blockchain/eth/truffle-svelte-typescript-boilerplate/contracts/SimpleStorage.sol\":{\"keccak256\":\"0x68129a79d3ae5be4eb5ab3fe89b2489eee5d308a13502f9c81a3e4d772418c66\",\"urls\":[\"bzz-raw://c4f0ac4185b642aa429442fe24bfee1c325d7d9690502c909b6232971d8b6c09\",\"dweb:/ipfs/QmYvCSWmmCfX5CSHqtwSYjboE4gLCJrhstjMcqSpeUcXua\"]}},\"version\":1}";
+    var bytecode = "0x608060405234801561001057600080fd5b50610167806100206000396000f3fe608060405234801561001057600080fd5b50600436106100415760003560e01c80632a1afcd9146100465780636d4ce63c146100645780637f626f1a14610082575b600080fd5b61004e6100b0565b6040518082815260200191505060405180910390f35b61006c6100b6565b6040518082815260200191505060405180910390f35b6100ae6004803603602081101561009857600080fd5b81019080803590602001909291905050506100bf565b005b60005481565b60008054905090565b806000819055507f60cdc157ca4737a5d39a0e107532616e7bf6946e615228812c7f9bc9f81797a66040518080602001828103825260198152602001807f446174612073746f726564207375636365737366756c6c79210000000000000081525060200191505060405180910390a15056fea2646970667358221220c0d5cb84f0d87142f25ebb6888cf542b2fd35b3543ab2f7c5855d2e6f1883f4c64736f6c63430007000033";
+    var deployedBytecode = "0x608060405234801561001057600080fd5b50600436106100415760003560e01c80632a1afcd9146100465780636d4ce63c146100645780637f626f1a14610082575b600080fd5b61004e6100b0565b6040518082815260200191505060405180910390f35b61006c6100b6565b6040518082815260200191505060405180910390f35b6100ae6004803603602081101561009857600080fd5b81019080803590602001909291905050506100bf565b005b60005481565b60008054905090565b806000819055507f60cdc157ca4737a5d39a0e107532616e7bf6946e615228812c7f9bc9f81797a66040518080602001828103825260198152602001807f446174612073746f726564207375636365737366756c6c79210000000000000081525060200191505060405180910390a15056fea2646970667358221220c0d5cb84f0d87142f25ebb6888cf542b2fd35b3543ab2f7c5855d2e6f1883f4c64736f6c63430007000033";
     var immutableReferences = {
     };
     var sourceMap = "25:308:1:-:0;;;;;;;;;;;;;;;;;;;";
     var deployedSourceMap = "25:308:1:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;94:22;;;:::i;:::-;;;;;;;;;;;;;;;;;;;248:83;;;:::i;:::-;;;;;;;;;;;;;;;;;;;123:119;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;94:22;;;;:::o;248:83::-;284:11;314:10;;307:17;;248:83;:::o;123:119::-;179:1;166:10;:14;;;;196:39;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;123:119;:::o";
     var source = "pragma solidity ^0.7.0;\n\ncontract SimpleStorage {\n    event StorageSet(string _message);\n\n    uint public storedData;\n\n    function setStore(uint x) public {\n        storedData = x;\n\n        emit StorageSet(\"Data stored successfully!\");\n    }\n\n    function get() view public returns (uint retVal) {\n        return storedData;\n    }\n}";
-    var sourcePath = "/home/lev/code/blockchain/truffle-svelte-typescript-boilerplate/truffle-svelte-starter/contracts/SimpleStorage.sol";
+    var sourcePath = "/home/lev/code/blockchain/eth/truffle-svelte-typescript-boilerplate/contracts/SimpleStorage.sol";
     var ast = {
-    	absolutePath: "/home/lev/code/blockchain/truffle-svelte-typescript-boilerplate/truffle-svelte-starter/contracts/SimpleStorage.sol",
+    	absolutePath: "/home/lev/code/blockchain/eth/truffle-svelte-typescript-boilerplate/contracts/SimpleStorage.sol",
     	exportedSymbols: {
     		SimpleStorage: [
     			87
@@ -777,7 +812,7 @@ var app = (function () {
     };
     var legacyAST = {
     	attributes: {
-    		absolutePath: "/home/lev/code/blockchain/truffle-svelte-typescript-boilerplate/truffle-svelte-starter/contracts/SimpleStorage.sol",
+    		absolutePath: "/home/lev/code/blockchain/eth/truffle-svelte-typescript-boilerplate/contracts/SimpleStorage.sol",
     		exportedSymbols: {
     			SimpleStorage: [
     				87
@@ -1203,9 +1238,31 @@ var app = (function () {
     	version: "0.7.0+commit.9e61f92b.Emscripten.clang"
     };
     var networks = {
+    	"5777": {
+    		events: {
+    			"0x60cdc157ca4737a5d39a0e107532616e7bf6946e615228812c7f9bc9f81797a6": {
+    				anonymous: false,
+    				inputs: [
+    					{
+    						indexed: false,
+    						internalType: "string",
+    						name: "_message",
+    						type: "string"
+    					}
+    				],
+    				name: "StorageSet",
+    				type: "event"
+    			}
+    		},
+    		links: {
+    		},
+    		address: "0x3695d0B3Bc37efcC347916E548E05C0b55532056",
+    		transactionHash: "0x13f3c720db69e0808dd232f8b5128d36d2d045c92f8e939a870d6c124bc92fc8"
+    	}
     };
     var schemaVersion = "3.3.3";
-    var updatedAt = "2021-01-10T22:58:06.896Z";
+    var updatedAt = "2021-01-29T14:45:33.426Z";
+    var networkType = "ethereum";
     var devdoc = {
     	kind: "dev",
     	methods: {
@@ -1235,28 +1292,12 @@ var app = (function () {
     	networks: networks,
     	schemaVersion: schemaVersion,
     	updatedAt: updatedAt,
+    	networkType: networkType,
     	devdoc: devdoc,
     	userdoc: userdoc
     };
 
-    async function loadWeb3 () {
-        // window.Web3 = Web3
-        if (window.ethereum) {
-            window.web3 = new window.Web3(window.ethereum);
-            // await window.ethereum.enable()
-        }
-        else if (window.web3) {
-            window.web3 = new window.Web3(window.web3.currentProvider);
-        }
-        else {
-            window.alert("Non-Ethereum browser detected. You should consider trying MetaMask!");
-        }
-        return window.web3;
-    }
-
     /* src/App.svelte generated by Svelte v3.31.2 */
-
-    const { console: console_1 } = globals;
     const file = "src/App.svelte";
 
     function create_fragment(ctx) {
@@ -1298,20 +1339,20 @@ var app = (function () {
     			t8 = text("The stored value is: ");
     			t9 = text(/*storageValue*/ ctx[0]);
     			attr_dev(h1, "class", "masthead text-center text-dark svelte-hqbxra");
-    			add_location(h1, file, 49, 6, 2089);
+    			add_location(h1, file, 38, 6, 1585);
     			attr_dev(h40, "class", "text-center text-primary");
-    			add_location(h40, file, 50, 6, 2155);
-    			add_location(h41, file, 55, 8, 2322);
-    			add_location(p0, file, 56, 8, 2362);
-    			add_location(p1, file, 61, 8, 2520);
+    			add_location(h40, file, 39, 6, 1651);
+    			add_location(h41, file, 44, 8, 1818);
+    			add_location(p0, file, 45, 8, 1858);
+    			add_location(p1, file, 50, 8, 2008);
     			attr_dev(div0, "class", "alert alert-secondary");
-    			add_location(div0, file, 54, 6, 2278);
+    			add_location(div0, file, 43, 6, 1774);
     			attr_dev(div1, "class", "col-8 offset-2");
-    			add_location(div1, file, 48, 4, 2054);
+    			add_location(div1, file, 37, 4, 1550);
     			attr_dev(div2, "class", "row");
-    			add_location(div2, file, 47, 2, 2032);
+    			add_location(div2, file, 36, 2, 1528);
     			attr_dev(div3, "class", "container");
-    			add_location(div3, file, 46, 0, 2006);
+    			add_location(div3, file, 35, 0, 1502);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -1394,57 +1435,56 @@ var app = (function () {
     			});
     	};
 
+    	
     	let storageValue;
+    	let simpleStorage;
     	let connected = false;
     	let web3;
+    	let address;
 
     	onMount(() => __awaiter(void 0, void 0, void 0, function* () {
     		const instance = yield loadWeb3();
     		window["web3"] = web3 = instance;
-    		yield loadBlockchainData();
+    		const ret = yield initAPI(web3, SimpleStorageContract);
+    		simpleStorage = ret.Contract;
+    		address = ret.address;
+    		yield setDefaultVal();
+    		$$invalidate(0, storageValue = yield simpleStorage.methods.get().call());
     	}));
 
-    	function loadBlockchainData() {
+    	function setDefaultVal() {
     		return __awaiter(this, void 0, void 0, function* () {
-    			const accounts = (yield window.ethereum.send("eth_requestAccounts")).result;
-    			const networkId = yield window.web3.eth.net.getId();
-    			const simpleStorageData = SimpleStorageContract.networks[networkId];
-
-    			if (simpleStorageData) {
-    				const simpleStorage = new web3.eth.Contract(SimpleStorageContract.abi, simpleStorageData.address);
-    				console.log(simpleStorage.methods);
-    				yield simpleStorage.methods.setStore(5).send({ from: accounts[0] });
-    				$$invalidate(0, storageValue = yield simpleStorage.methods.storedData().call());
-    				console.log(storageValue);
-    				connected = true;
-    			} else {
-    				window.alert("Simple Storage contract not deployed to detected network.");
-    			}
+    			yield simpleStorage.methods.setStore(5).send({ from: address });
     		});
     	}
 
     	const writable_props = [];
 
     	Object.keys($$props).forEach(key => {
-    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console_1.warn(`<App> was created with unknown prop '${key}'`);
+    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn(`<App> was created with unknown prop '${key}'`);
     	});
 
     	$$self.$capture_state = () => ({
     		__awaiter,
-    		SimpleStorageContract,
     		loadWeb3,
     		onMount,
+    		initAPI,
+    		SimpleStorageContract,
     		storageValue,
+    		simpleStorage,
     		connected,
     		web3,
-    		loadBlockchainData
+    		address,
+    		setDefaultVal
     	});
 
     	$$self.$inject_state = $$props => {
     		if ("__awaiter" in $$props) __awaiter = $$props.__awaiter;
     		if ("storageValue" in $$props) $$invalidate(0, storageValue = $$props.storageValue);
+    		if ("simpleStorage" in $$props) simpleStorage = $$props.simpleStorage;
     		if ("connected" in $$props) connected = $$props.connected;
     		if ("web3" in $$props) web3 = $$props.web3;
+    		if ("address" in $$props) address = $$props.address;
     	};
 
     	if ($$props && "$$inject" in $$props) {
